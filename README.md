@@ -59,12 +59,31 @@ Then install the core dependencies with:
 uv pip install -e .
 ```
 
+### Reproducible installs (optional)
+
+To install the exact dependency versions used by the maintainers, use the provided lock files:
+
+```shell
+# Core runtime deps only
+uv pip install -r requirements/base.txt
+
+# Core + dev + test deps (for contributors and CI)
+uv pip install -r requirements/dev.txt
+```
+
+To regenerate the lock files after changing `pyproject.toml`:
+
+```shell
+pip-compile pyproject.toml --output-file requirements/base.txt --strip-extras
+pip-compile pyproject.toml --extra dev --extra test --output-file requirements/dev.txt --strip-extras
+```
+
 To run the example scripts, install the remaining dependencies as follows:
 
 ```shell
 uv pip install datasets transformers datatrove[io] numba wandb
 # Fused kernels
-uv pip install ninja triton "flash-attn>=2.5.0" --no-build-isolation
+uv pip install ninja "flash-attn>=2.5.0,<2.7.0" --no-build-isolation
 ```
 
 Next, log into your Hugging Face and Weights and Biases accounts as follows:
