@@ -83,7 +83,7 @@ To run the example scripts, install the remaining dependencies as follows:
 ```shell
 uv pip install datasets transformers datatrove[io] numba wandb
 # Fused kernels
-uv pip install ninja "flash-attn>=2.5.0,<2.7.0" --no-build-isolation
+uv pip install ninja psutil && uv pip install "flash-attn>=2.5.0,<2.7.0" --no-build-isolation
 ```
 
 Next, log into your Hugging Face and Weights and Biases accounts as follows:
