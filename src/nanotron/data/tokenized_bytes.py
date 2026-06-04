@@ -450,6 +450,9 @@ class TokenizedBytesFolderDataset(DatatroveFolderDataset):
             files_order=[str(f.file_path) for f in self.files],
         )
 
+    def __getitem__(self, item):
+        return super().__getitem__(item % len(self))
+
 
 def build_dataset(
     dataset_folder: str,
