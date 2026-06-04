@@ -46,13 +46,16 @@ test = [
 ]
 
 fast-modeling = [
+    "ninja",
     "flash-attn>=2.5.0,<2.7.0",
 ]
 
 nanosets = [
-     "transformers",
-     "datatrove[io,processing]@git+https://github.com/huggingface/datatrove",
-     "numba",
+    "transformers",
+    # Uses nouamane/avoid-s3 branch to avoid S3 import issues in RunPod environment
+    "datatrove[io,processing]@git+https://github.com/huggingface/datatrove.git@nouamane/avoid-s3",
+    "numba",
+    "wandb",
 ]
 
 s3 = [
@@ -60,6 +63,10 @@ s3 = [
     "s3fs",
     "s5cmd",
 ]
+
+# grouped_gemm must be installed with --no-build-isolation (links against container torch/CUDA headers)
+# Install manually: pip install --no-build-isolation git+https://github.com/fanshiqing/grouped_gemm@main
+moe = []
 
 [build-system]
 requires = [

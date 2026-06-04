@@ -37,8 +37,30 @@ Nanotron is a library for pretraining transformer models. It provides a simple a
 
 ## Installation
 
-To run the code in this project, first create a Python virtual environment using e.g. `uv`:
+### RunPod (`runpod/pytorch:2.4.0-py3.11-cuda12.4.1-devel-ubuntu22.04`)
 
+One command sets up everything:
+
+```shell
+bash scripts/setup_runpod.sh
+```
+
+**Why not a single `pip install`?** Three categories of dependencies have different constraints:
+
+| Category | Examples | Why it's separate |
+|----------|----------|-------------------|
+| Normal PyPI packages | `wandb`, `numba`, `s5cmd` | Installed from locked `requirements/dev.txt` |
+| CUDA extension packages | `flash-attn`, `grouped_gemm` | Must compile against the container's PyTorch headers; requires `--no-build-isolation` — cannot go in a standard lockfile |
+| C++ build step | NeMo dataset helpers | Compiled via `make`; outside pip entirely |
+| Git-branch package | `datatrove` | Needs branch `nouamane/avoid-s3` (not on PyPI); installed after the lockfile step |
+
+See `scripts/setup_runpod.sh` for the full annotated steps.
+
+---
+
+### Standard Installation (non-RunPod)
+
+To run the code in this project, first create a Python virtual environment using e.g. `uv`:
 
 ```shell
 uv venv nanotron --python 3.11 && source nanotron/bin/activate && uv pip install --upgrade pip
@@ -59,7 +81,23 @@ Then install the core dependencies with:
 uv pip install -e .
 ```
 
-### Reproducible installs (optional)
+To also install optional extras:
+
+```shell
+# Data processing + experiment tracking
+uv pip install -e ".[nanosets]"
+
+# Flash attention (compiles CUDA extension — takes ~5 min)
+uv pip install ninja && uv pip install -e ".[fast-modeling]" --no-build-isolation
+
+# S3 checkpoint support
+uv pip install -e ".[s3]"
+
+# MoE (grouped_gemm — compiles CUDA extension — takes ~5 min)
+pip install --no-build-isolation git+https://github.com/fanshiqing/grouped_gemm@main
+```
+
+### Reproducible installs
 
 To install the exact dependency versions used by the maintainers, use the provided lock files:
 
@@ -76,14 +114,6 @@ To regenerate the lock files after changing `pyproject.toml`:
 ```shell
 pip-compile pyproject.toml --output-file requirements/base.txt --strip-extras
 pip-compile pyproject.toml --extra dev --extra test --output-file requirements/dev.txt --strip-extras
-```
-
-To run the example scripts, install the remaining dependencies as follows:
-
-```shell
-uv pip install datasets transformers datatrove[io] numba wandb
-# Fused kernels
-uv pip install ninja psutil && uv pip install "flash-attn>=2.5.0,<2.7.0" --no-build-isolation
 ```
 
 Next, log into your Hugging Face and Weights and Biases accounts as follows:
