@@ -5,6 +5,7 @@ Command:
 """
 
 import json
+import sys
 from argparse import ArgumentParser
 from pathlib import Path
 from typing import Literal, Optional, Type
@@ -17,7 +18,8 @@ from nanotron.models.llama import LlamaForTraining
 from transformers import AutoTokenizer, LlamaForCausalLM
 from transformers import LlamaConfig as HFLlamaConfig
 
-from .convert_weights import get_config_mapping, get_weight_mapping, load_nanotron_model
+sys.path.insert(0, str(Path(__file__).parent))
+from convert_weights import get_config_mapping, get_weight_mapping, load_nanotron_model
 
 TEST_PROMPT = "What is the meaning of the word chutzpah?\nThe word chutzpah means"
 
