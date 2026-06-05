@@ -64,7 +64,6 @@ six==1.17.0               # via python-dateutil
 sympy==1.14.0             # via torch
 tomlkit==0.15.0           # via pylint
 torch==2.4.0              # via nanotron (pyproject.toml), torchtyping
-transformers==4.51.3      # 4.52+ broke GenerationMixin import chain
 torchtyping==0.1.5        # via nanotron (pyproject.toml)
 tqdm==4.67.3              # via datasets, huggingface-hub, nanotron (pyproject.toml)
 typeguard==2.13.3         # via torchtyping
