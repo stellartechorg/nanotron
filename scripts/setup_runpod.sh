@@ -27,6 +27,7 @@ uv pip install -e . --no-deps
 echo "=== Step 3: Install optional PyPI extras (nanosets + s3) ==="
 # wandb, numba, s5cmd, boto3, s3fs — pure Python, just not in core lockfile
 uv pip install wandb numba s5cmd boto3 s3fs
+uv pip install transformers==4.51.3
 
 echo "=== Step 4: Install datatrove from the required git branch ==="
 # The main branch breaks in this RunPod environment; nouamane/avoid-s3 is required
